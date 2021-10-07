@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include <stdlib.h>
+#include <time.h>
 
 bool loShuMagicSquareCheck(int array[3][3])
 {
@@ -34,9 +36,55 @@ bool loShuMagicSquareCheck(int array[3][3])
    return result;
 }
 
-void printSquare(int array[9])
+void loShuMagicSquareGenerator()
 {
+   bool isLoShuMagicSquare = false;
+   int counter = 0, index = 0, temp, randIndex;
+   int array[3][3];
+   int numbers[9] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+   time_t t;
 
+   srand(time(NULL));
+
+   while (isLoShuMagicSquare != true)
+   {
+
+      // scramble numbers array
+      for (int i = 0; i < 9; i++)
+      {
+         randIndex = (rand() % 9);
+         temp = numbers[randIndex];
+         numbers[randIndex] = numbers[i];
+         numbers[i] = temp;
+      }
+
+      for (int row = 0; row < 3; row++)
+      {
+         for (int col = 0; col < 3; col++)
+         {
+            array[row][col] = numbers[index];
+            index++;
+         }
+      }
+
+      index = 0;
+      counter++;
+      isLoShuMagicSquare = loShuMagicSquareCheck(array);
+   }
+
+   printf("Total Number of Squares Generated Before Success: %d\n", counter);
+
+   //prints array
+   for (int row = 0; row < 3; row++)
+   {
+      printf("[");
+      for (int col = 0; col < 3; col++)
+      {
+         printf(" %d ", array[row][col]);
+         if (col == 2)
+            printf("]\n");
+      }
+   }
 }
 
 void main()
@@ -44,11 +92,19 @@ void main()
    bool isLoShuMagicSquare;
    int loShuMagicSquare[3][3] = {{4, 9, 2}, {3, 5, 7}, {8, 1, 6}};
    int square[3][3] = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
-   // isLoShuMagicSquare = loShuMagicSquareCheck(loShuMagicSquare);
+   isLoShuMagicSquare = loShuMagicSquareCheck(loShuMagicSquare);
+
+   if (isLoShuMagicSquare == false)
+      printf("Not a Lo Shu Magic Square\n");
+   else
+      printf("Is a Lo Shu Magic Square\n");
+
    isLoShuMagicSquare = loShuMagicSquareCheck(square);
 
    if(isLoShuMagicSquare == false)
       printf("Not a Lo Shu Magic Square\n");
    else
       printf("Is a Lo Shu Magic Square\n");
+
+   loShuMagicSquareGenerator();
 }
